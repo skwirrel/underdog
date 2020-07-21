@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env nodejs
 
 /*
 ============================================================================================================
@@ -461,7 +461,7 @@ var server = net.createServer(function(socket) {
 	socket.setEncoding('latin1');
 
 	socket.on('error', function(err){
-		if (config.debug) console.log('Network error :'+err.toString());
+		if (config.debug) console.log('Client network error :'+err.toString());
 		if (!recordedClosure) numClients--;
 		recordedClosure=true;
 		this.destroy();
@@ -470,7 +470,7 @@ var server = net.createServer(function(socket) {
 	socket.on('end', function(){
 		if (!recordedClosure) numClients--;
 		recordedClosure=true;
-		if (config.debug) console.log('Connection closed');
+		if (config.debug) console.log('Client connection closed');
 	});
   
 	socket.on('data', function(buffer) {
