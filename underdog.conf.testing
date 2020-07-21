@@ -1,0 +1,15 @@
+# This config file contains typical values used for testing
+# With this configuration a hash should be blocked after just 4 attempts
+#   but will be unlocked in just 5 seconds
+# The log will fill after just 5 hashes - at which point the oldest entry will be dropped
+listenIp            = 127.0.0.1
+proxyIp             = 127.0.0.1
+basePort            = 8000
+instances           = 2
+timeChunk           = 7200 # Seconds
+numRecords          = 5
+maxCount            = 4
+maxAge              = 5 # Seconds
+tidyUpInterval      = 1 # Seconds
+statsUpdateInterval = 5 # Seconds
+debug               = true

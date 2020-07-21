@@ -1,0 +1,3 @@
+# Run Underdog every minute - it will detect if a process is already running
+# If it is then it will do nothing
+* * * * *     root node /usr/sbin/underdog.js &
