@@ -1,3 +1,10 @@
+# Introduction
+Brute force protection is an interesting problem. You need to keep track of how often any given username has been used over a reasonable amount of time. The lookup should be super-quick as you don't want to slow down the login process. But you need to be able to store a _lot_ of usernames very efficiently because an attacker might deliberately flood the system with a lot of usernames to try and flush your logs. You also need an efficient way to clear out old records after a suitable expiry time (e.g. an hour) without laboriously checking every single record to see if it has expired.  
+
+This code is written as a standalone service with no external dependencies (other than requiring node.js to be installed) - so, no npm modules required, no database required. This is with a view to enabling users to review the code easily and also to make it easy to install and maintain. It is designed to be simple to integrate - you just send it the username and it responds with an answer of either "OK" or "BLOCK".
+
+I have built the code to do this as a single simple standalone programme with no other dependencies (i.e no database, no other code libraries). It is very efficient in operation and fairly compact (only 550 lines of code). Running on my an i7 laptop I am able to serve 650 requests per second against a database of 1 million usernames. I think most of the limitation here is the speed of my test scripts, not the code - the test scripts were using 40% of my CPU and the code only 11%!
+
 # Installation
 Run `install.sh` as root. Underdog doesn't (yet) have the necessary gubbins to run as a service. Instead it is designed to be run from cron. The install script puts a file called `underdog` in `/etc/cron.d/`. This triggers the underdog script every minute. The underdog script reads its configuration from `/etc/underdog.conf` and looks at which ports it should be running on. It tries to bind to each port in turn until it runs out. If it finds an available port it will start listening on it and stop trying other ports.
 
