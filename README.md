@@ -26,7 +26,7 @@ The response to a has will be a single line consisting of a result followed by a
 
 `BLOCK:<unixtime>` - The rate limit has been exceeded, this username will not be allowed to log in until the time specified (it is up to the caller whether this time is revealed to the end user or not).
 
-`ERROR` - some sort of error occurred - it is up to you whether you decide to allow or block the login attempt.
+`ERROR:<error message>` - some sort of error occurred - it is up to you whether you decide to allow or block the login attempt.
 
 ## Commands
 As mentioned above you can pass a command instead of a hash to the server. The following commands are supported:
