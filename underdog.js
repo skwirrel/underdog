@@ -86,6 +86,7 @@ CORE HASH TRACKING CODE
 ============================================================================================================
 */
 
+// Globalise the functions we want to export from the hash tracking code.
 var checkHash, getStats;
 
 (function() {
@@ -405,11 +406,14 @@ function writeAndClose( socket, message ) {
 
 }
 
+// Decide whether we need to handle this request ourselves or pass it on to another process
+// ... then act on this decision
 function proxyOrProcess( socket, hash ) {
 	let destPort;
 
 	var closed = false;
 	
+	// Handle STATS command
 	if (hash=='stats') {
 		let stats = getStats();
 		stats.uptime = (new Date().getTime() - startedAt)/1000;
@@ -426,6 +430,7 @@ function proxyOrProcess( socket, hash ) {
 		return;
 	}
 	
+	// Handle STOP command
 	if (hash=='stop') {
 		// If we are already in the process of shutting down then ignore this
 		// This is probably the stop command going full circle
