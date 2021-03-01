@@ -87,7 +87,7 @@ CORE HASH TRACKING CODE
 */
 
 // Globalise the functions we want to export from the hash tracking code.
-var checkHash, getStats;
+var checkHash, getStats, setupBuffer;
 
 (function() {
 
@@ -121,8 +121,7 @@ var checkHash, getStats;
 
 	if (debug) console.log('Record size is:',recordSize);
 	if (debug) console.log('Buffer size is:',numRecords * recordSize);
-	// I have no idea why the +1 is required here - seems like node is out by one
-	const recordBuffer = Buffer.alloc( numRecords * recordSize +1 );
+	var recordBuffer;
 
 	function bytesRequired(y) {
 	  return Math.ceil( Math.log(y) / Math.log(2) / 8 );
@@ -213,16 +212,20 @@ var checkHash, getStats;
 	// End of RecordList Object
 	// ---------------------------------------------------------
 	
-	
 	// Create two record lists: one for empty records to be reused and the other for hashes we have seen
 	const emptyRecords = new RecordList();
 	const seenHashes = new RecordList();
 	const seenHashesIndex = new Map();
 
-	// Add all the record to the Empty Records Stack
-	for( var ptr=0; ptr<numRecords; ptr++ ) {
-		emptyRecords.push( ptr );
-	}
+    setupBuffer = function() {
+	    // I have no idea why the +1 is required here - seems like node is out by one
+        recordBuffer = Buffer.alloc( numRecords * recordSize +1 );
+
+        // Add all the record to the Empty Records Stack
+        for( var ptr=0; ptr<numRecords; ptr++ ) {
+            emptyRecords.push( ptr );
+        }
+    }
 
 	function removeFromIndex( recordPtr ) {
 		let recordOffset = recordPtr * recordSize;
@@ -538,6 +541,8 @@ server.on('error',function(e){
 server.on('listening',function(p){
 	let address = this.address();
 	if (config.debug) console.log('Server bound to port ',address.port,' on IP: ',address.address);
+    // Don't actually grab the memory until we know we have a connection
+    setupBuffer();    
 	listenPort = address.port;
 });
 
